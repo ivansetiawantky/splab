@@ -136,6 +136,17 @@ complete -d cd
 
 for i in $(seq 1 9); do alias "$i"="cd +${i}"; done
 
+# git prompt
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+source /home/spluser/.git-prompt.sh
+source /home/spluser/.svn-prompt.sh
+
+last_exec_status() { local e=$?; [ $e != 0 ] && echo -e "$e "; }
+
+PS1='${debian_chroot:+($debian_chroot)}\[\e[38;5;202m\]$(last_exec_status)\[\033[34m\]\D{%m/%d %H:%M:%S }\[\e[38;5;245m\]\u\[\e[00m\]@\[\e[38;5;172m\]\h\[\033[00m\](\j):\[\e[38;5;5m\]\w\[\033[0;31m\]$(__git_ps1 "(%s)")$(__svn_prompt)\[\033[00m\]
+\$ '
+
 # Automatically activate python venv in terminal inside container:
 if [[ -f /home/spluser/venv/bin/activate ]] ; then
     source /home/spluser/venv/bin/activate

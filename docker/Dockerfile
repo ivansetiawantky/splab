@@ -35,8 +35,10 @@ RUN apt-get update \
 RUN useradd --create-home --shell /bin/bash spluser
 USER spluser
 WORKDIR /home/spluser
-COPY ./spluser/dot.bashrc /tmp
+COPY ./spluser/dot.bashrc ./spluser/dot.git-prompt.sh ./spluser/dot.svn-prompt.sh /tmp/
 RUN cat /tmp/dot.bashrc >> /home/spluser/.bashrc
+RUN cp /tmp/dot.git-prompt.sh /home/spluser/.git-prompt.sh
+RUN cp /tmp/dot.svn-prompt.sh /home/spluser/.svn-prompt.sh
 
 # venv directory must be owned by spluser, so create venv with user spluser (i.e., after USER spluser layer)
 ENV VIRTUAL_ENV=/home/spluser/venv
