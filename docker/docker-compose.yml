@@ -30,33 +30,59 @@
 # To view or update it (extensions etc.) after attaching, select Dev Containers: Open Container Configuration File from the Command Palette.
 #   - Location of setting file "imagename.json" is in the host:~/Library/Application Support/Code/User/globalStorage ... (so it is PERSISTENT)
 # To activate autocompletion, inside the container, install and ENABLE the Python, Python Debugger extension etc:
-# "charliermarsh.ruff", "ms-python.debugpy", "ms-python.python", "ms-python.vscode-pylance", python extension by microsoft, python debugger by microsoft, python extension pack by Don Jayamanne
+# "charliermarsh.ruff", "ms-python.debugpy", "ms-python.python", "ms-python.vscode-pylance", "ms-toolsai.jupyter" (etc.),
+# python extension by microsoft, python debugger by microsoft, python extension pack by Don Jayamanne
 #
 # Black formatter in vscode extension is NOT good for notebook... Use ruff instead.
 #
-# >Preferences: Open Settings (UI)
+# >Dev Containers: Open Container Configuration File
 #
-# "settings": {
-#         "python.defaultInterpreterPath": "/home/spluser/venv/bin/python3",
-#         "python.terminal.activateEnvInCurrentTerminal": true, # NOT NEEDED. source-d in ~spluser/.bashrc
-#         "editor.formatOnSave": true,
-#         "ruff.importStrategy": "useBundled",
-#         "editor.defaultFormatter": "charliermarsh.ruff",
-#         "[python]": {
-#                 "editor.formatOnSave": true,
-#                 "editor.defaultFormatter": "charliermarsh.ruff",
-#                 "editor.codeActionsOnSave": {
-#                         "source.organizeImports": "explicit",
-#                         "source.organizeImports.ruff": "explicit"
-#                         "source.fixAll": "explicit",
-#                         "source.fixAll.ruff": "explicit",
-#                 }
-#         },
-#         "editor.codeActionsOnSave": {
-#                 "source.organizeImports": "explicit"
-#                 "source.fixAll": "explicit",
-#         }
-# },
+# {
+# 	"extensions": [
+# 		"batisteo.vscode-django",
+# 		"charliermarsh.ruff",
+# 		"donjayamanne.python-environment-manager",
+# 		"donjayamanne.python-extension-pack",
+# 		"github.copilot",
+# 		"github.copilot-chat",
+# 		"kevinrose.vsc-python-indent",
+# 		"ms-python.debugpy",
+# 		"ms-python.python",
+# 		"ms-python.vscode-pylance",
+# 		"ms-python.vscode-python-envs",
+# 		"ms-toolsai.jupyter",
+# 		"ms-toolsai.jupyter-keymap",
+# 		"ms-toolsai.jupyter-renderers",
+# 		"ms-toolsai.vscode-jupyter-cell-tags",
+# 		"ms-toolsai.vscode-jupyter-slideshow",
+# 		"njpwerner.autodocstring",
+# 		"visualstudioexptteam.intellicode-api-usage-examples",
+# 		"visualstudioexptteam.vscodeintellicode",
+# 		"wholroyd.jinja"
+# 	],
+# 	"settings": {
+# 		"python.defaultInterpreterPath": "/home/spluser/venv/bin/python3",
+#     "python.terminal.activateEnvInCurrentTerminal": true, # NOT NEEDED. source-d in ~spluser/.bashrc
+# 		"editor.formatOnSave": true,
+# 		"ruff.importStrategy": "useBundled",
+# 		"editor.defaultFormatter": "charliermarsh.ruff",
+# 		"[python]": {
+# 			"editor.formatOnSave": true,
+# 			"editor.defaultFormatter": "charliermarsh.ruff",
+# 			"editor.codeActionsOnSave": {
+# 				"source.organizeImports": "explicit",
+# 				"source.organizeImports.ruff": "explicit",
+# 				"source.fixAll": "explicit",
+# 				"source.fixAll.ruff": "explicit",
+# 			}
+# 		},
+# 		"editor.codeActionsOnSave": {
+# 			"source.organizeImports": "explicit",
+# 			"source.fixAll": "explicit",
+# 		}
+# 	},
+# 	"workspaceFolder": "/home/spluser/work"
+# }
 #
 services:
   pythonsplab:
