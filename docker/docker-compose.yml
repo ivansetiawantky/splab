@@ -1,0 +1,70 @@
+# docker compose -f ./docker-compose.yml up -d [--no-build]
+#
+# To build also: `docker compose -f ./docker-compose.yml up --build -d`
+# But, it is recommended to do build at the 1st time only.
+# Best practice is to build the image in advance so `docker compose` just run the image as container.
+#
+# To prevent image build (i.e., use already available image): `docker compose -f ./docker-compose.yml up -d --no-build`
+# This is useful when the base image is not supported anymore (ubuntu non-LTS), so build will likely fail.
+#
+# docker compose -f ./docker-compose.yml down --volumes
+# docker compose -f ./docker-compose.yml logs -f --tail=100
+# docker compose -f ./docker-compose.yml logs -f --no-color --tail=100
+# docker compose -f ./docker-compose.yml logs -f -t --tail=100
+#
+# To execute another /bin/bash at the currently running container "splcont":
+# docker exec -it splcont /bin/bash
+# To execute another /bin/bash at the currently running container "splcont", as root (for example to do `apt-get update`):
+# docker exec -u root -it splcont /bin/bash
+#
+# Using vscode:
+# 1. docker compose -f ./docker-compose.yml up -d [--no-build]
+# 2. In vscode, use ">Dev Container" (Command+Shift+p) to attach to splcont container.
+# 3. Open python file, open terminal (confirm that venv is activated), etc.
+#     - For side-by-side edit and execution result, read https://code.visualstudio.com/docs/python/jupyter-support-py
+#     - That is, use "Python Interactive window" (py file) instead of Jupyterlab notebook (ipynb file)
+#     - In python file (NOT notebook file): Command + Shift + p: Run current file in interactive window
+#
+# Install vscode extensions, etc. to the running container:
+# https://code.visualstudio.com/docs/devcontainers/attach-container
+# To view or update it (extensions etc.) after attaching, select Dev Containers: Open Container Configuration File from the Command Palette.
+#   - Location of setting file "imagename.json" is in the host:~/Library/Application Support/Code/User/globalStorage ... (so it is PERSISTENT)
+# To activate autocompletion, inside the container, install and ENABLE the Python, Python Debugger extension etc:
+# "charliermarsh.ruff", "ms-python.debugpy", "ms-python.python", "ms-python.vscode-pylance", python extension by microsoft, python debugger by microsoft, python extension pack by Don Jayamanne
+#
+# Black formatter in vscode extension is NOT good for notebook... Use ruff instead.
+#
+# >Preferences: Open Settings (UI)
+#
+# "settings": {
+#         "python.defaultInterpreterPath": "/home/spluser/venv/bin/python3",
+#         "python.terminal.activateEnvInCurrentTerminal": true, # NOT NEEDED. source-d in ~spluser/.bashrc
+#         "editor.formatOnSave": true,
+#         "ruff.importStrategy": "useBundled",
+#         "editor.defaultFormatter": "charliermarsh.ruff",
+#         "[python]": {
+#                 "editor.formatOnSave": true,
+#                 "editor.defaultFormatter": "charliermarsh.ruff",
+#                 "editor.codeActionsOnSave": {
+#                         "source.organizeImports": "explicit",
+#                         "source.organizeImports.ruff": "explicit"
+#                         "source.fixAll": "explicit",
+#                         "source.fixAll.ruff": "explicit",
+#                 }
+#         },
+#         "editor.codeActionsOnSave": {
+#                 "source.organizeImports": "explicit"
+#                 "source.fixAll": "explicit",
+#         }
+# },
+#
+services:
+  pythonsplab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: splab
+    container_name: splcont
+    command: "bash /home/spluser/work/docker/start-command.sh"
+    volumes:
+    - ../:/home/spluser/work
