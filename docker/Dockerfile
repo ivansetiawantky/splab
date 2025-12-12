@@ -27,6 +27,7 @@ RUN apt-get update \
     vim \
     less \
     tree \
+    git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
