@@ -36,6 +36,9 @@
 # Black formatter in vscode extension is NOT good for notebook... Use ruff instead.
 #
 # >Dev Containers: Open Container Configuration File
+# OR
+# >Preferences: Open Settings (UI)
+# search for "formatonsave" in "Remote", then enable all.
 #
 # {
 # 	"extensions": [
@@ -56,9 +59,11 @@
 # 		"ms-toolsai.vscode-jupyter-cell-tags",
 # 		"ms-toolsai.vscode-jupyter-slideshow",
 # 		"njpwerner.autodocstring",
+#     "shd101wyy.markdown-preview-enhanced",
 # 		"visualstudioexptteam.intellicode-api-usage-examples",
 # 		"visualstudioexptteam.vscodeintellicode",
 # 		"wholroyd.jinja"
+#     "yzhang.markdown-all-in-one"
 # 	],
 # 	"settings": {
 # 		"python.defaultInterpreterPath": "/home/spluser/venv/bin/python3",
