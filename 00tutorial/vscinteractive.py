@@ -36,9 +36,18 @@ print(512)
 # \int_{1}^{\infty} \frac{1}{x^2} \mathrm{d}x = 1
 # $$
 # $$
-# E = mc^2 \tag{2002}
+# E = mc^2. \tag{2002}
 # $$
 # This is also a displayed mathematics:
 # $$
 # \frac{\mu_0}{4\pi} \times \frac{i \mathrm{d}l \sin \theta}{r^2}
 # $$
+# For more example, see [my github's ivansetiawantky/ttslearn/notebooks/nblatexmemo.ipynb](https://github.com/ivansetiawantky/ttslearn/blob/6e2d2d96e96a037c222e934ab679c60dd22b47a8/notebooks/nblatexmemo.ipynb).
+
+# %%
+# MARK: start debugging with F9 here
+a = 3.14
+print(a)
+
+# %%
+# %matplotlib inline
