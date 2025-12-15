@@ -1,4 +1,7 @@
 FROM ubuntu:24.04
+ARG SPLUSER=spluser
+ARG SPLUSER_HOME=/home/$SPLUSER
+ARG SPLUSER_PROJECTDIR=$SPLUSER_HOME/projdir
 
 #
 # Timezone must be set before starting cron etc.
@@ -32,16 +35,16 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # It is better to use non privileged user "spluser" to work.
-RUN useradd --create-home --shell /bin/bash spluser
-USER spluser
-WORKDIR /home/spluser
+RUN useradd --create-home --shell /bin/bash ${SPLUSER:?Do not leave SPLUSER empty}
+USER ${SPLUSER:?Do not leave SPLUSER empty}
+WORKDIR ${SPLUSER_HOME:?Do not leave SPLUSER_HOME empty}
 COPY ./spluser/dot.bashrc ./spluser/dot.git-prompt.sh ./spluser/dot.svn-prompt.sh /tmp/
-RUN cat /tmp/dot.bashrc >> /home/spluser/.bashrc
-RUN cp /tmp/dot.git-prompt.sh /home/spluser/.git-prompt.sh
-RUN cp /tmp/dot.svn-prompt.sh /home/spluser/.svn-prompt.sh
+RUN cat /tmp/dot.bashrc >> $SPLUSER_HOME/.bashrc
+RUN cp /tmp/dot.git-prompt.sh $SPLUSER_HOME/.git-prompt.sh
+RUN cp /tmp/dot.svn-prompt.sh $SPLUSER_HOME/.svn-prompt.sh
 
 # venv directory must be owned by spluser, so create venv with user spluser (i.e., after USER spluser layer)
-ENV VIRTUAL_ENV=/home/spluser/venv
+ENV VIRTUAL_ENV=$SPLUSER_HOME/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
@@ -59,7 +62,7 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 # docker run --rm -ti splab bash -c 'pip3 freeze'
 
 # Run the ubuntu system:
-# docker run --rm -it --name splcont -v `dirname $PWD`:/home/spluser/work splab
+# docker run --rm -it --name splcont -v `dirname $PWD`:/home/spluser/projdir splab
 # Inside splcont container, execute `source /home/spluser/venv/bin/activate`
 #
 # To execute another /bin/bash at the currently running container "splcont":
@@ -67,3 +70,6 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # To execute another /bin/bash at the currently running container "splcont", as root (for example to do `apt-get update`):
 # docker exec -u root -it splcont /bin/bash
+
+# Below to solve "fatal: detected dubious ownership in repository at '/home/spluser/projdir'"
+RUN git config --global --add safe.directory $SPLUSER_PROJECTDIR

@@ -50,4 +50,18 @@ a = 3.14
 print(a)
 
 # %%
+# Execute below in python REPL:
+# %matplotlib --list
+#
 # %matplotlib inline
+import math
+
+import numpy as np
+from matplotlib import pyplot as plt
+
+t = np.linspace(0, 2 * math.pi, 800)
+a = np.sin(t)
+plt.figure(figsize=(9, 6), dpi=75)
+plt.plot(t, a, "r")
+# Below is needed when run inside terminal, and must be terminal in the HOST, NOT the CONTAINER.
+plt.show()
