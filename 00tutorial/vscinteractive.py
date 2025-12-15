@@ -63,5 +63,28 @@ t = np.linspace(0, 2 * math.pi, 800)
 a = np.sin(t)
 plt.figure(figsize=(9, 6), dpi=75)
 plt.plot(t, a, "r")
-# Below is needed when run inside terminal, and must be terminal in the HOST, NOT the CONTAINER.
-plt.show()
+
+# %%
+# To display in the host windows, then must do:
+# 1. In Dockerfile/container: apt-get install python3-tk
+# 2. In mac host: xhost + localhost
+#    That is, activate x server (xquartz) in mac.
+#    The xquartz->setting->security: authenticate authorization & allow connection from network client.
+# 3. In python code, add: matplotlib.use("tkagg") and plt.show()
+# 4. In terminal inside container: DISPLAY=host.docker.internal:0 python3 vscinteractive.py
+#
+# Note: ssh -X user@remotepc.ip.com, will display the user@remotepc.ip.com's UI into the client.
+#
+# import math
+
+# import matplotlib
+
+# matplotlib.use("TkAgg")
+# import matplotlib.pyplot as plt
+# import numpy as np
+
+# t = np.linspace(0, 2 * math.pi, 800)
+# a = np.sin(t)
+# plt.figure(figsize=(9, 6), dpi=75)
+# plt.plot(t, a, "r")
+# plt.show()

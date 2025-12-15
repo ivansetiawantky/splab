@@ -23,6 +23,7 @@ RUN apt-get update \
     python3-venv \
     python3-dev \
     python3-pip \
+    python3-tk \
     build-essential \
     libsamplerate0 \
     libsndfile1 \
