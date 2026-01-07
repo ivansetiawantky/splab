@@ -208,3 +208,74 @@ plt.show()
 #   label = axs[1].get_xlabel()     VS label = plt.xlabel()
 # Setting properties:
 #   axs[2].set_xlabel("time")       VS plt.xlabel("time")
+
+# %%
+# https://matplotlib.org/stable/users/explain/quick_start.html
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()  # Reset to the default plot style/params
+# plt.style.use("ggplot")
+# plt.rcParams.update({"figure.autolayout": True})
+
+# Matplotlib graphs data on Figure, each of which can contain one or more Axes,
+# an area where points can be specified in terms of x-y coordinates (or theta-r in polar).
+# The simplest way of creating a Figure with an Axes is using pyplot.subplots.
+fig, ax = plt.subplots()
+
+# We can then use Axes.plot to draw some data on the Axes.
+ax.plot([1, 2, 3, 4], [1, 4, 2, 3])
+# In case where all figures created in a code cell (Jupyter or VSCode interactive python) are shown,
+# then below plt.show() can be left out.
+# plt.show()
+
+# %%
+# a figure with one Axes on the left, and two on the right:
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()  # Reset to the default plot style/params
+fig, axs = plt.subplot_mosaic([["left", "right_top"], ["left", "right_bottom"]])
+axs["left"].plot([1, 2, 3, 4], [1, 4, 2, 3])
+axs["right_top"].plot([1, 2, 3, 4], [1, 4, 2, 3])
+axs["right_bottom"].plot([1, 2, 3, 4], [1, 4, 2, 3])
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+# plt.rcParams.update({"figure.autolayout": True})
+fig, ax = plt.subplots(figsize=[5, 2.7])
+t = np.arange(0.0, 5.0, 0.01)
+s = np.cos(2 * np.pi * t)
+(line,) = ax.plot(t, s, lw=2)
+ax.annotate(
+    "local max",
+    xy=(2, 1),
+    xytext=(3, 1.5),
+    arrowprops=dict(facecolor="black", shrink=0.05),
+)
+ax.set_ylim(-2, 2)
+ax.set_xlabel(r"$t$")
+ax.set_ylabel(r"$\cos(2\pi t)$")
+ax.set_title(r"Plot of $\cos(2\pi t)$")
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+t = np.arange(0.0, 5.0, 0.01)
+s = np.cos(2 * np.pi * t)
+fig, (ax1, ax3) = plt.subplots(1, 2, figsize=(7, 2.7), layout="constrained")
+(l1,) = ax1.plot(t, s)
+ax2 = ax1.twinx()
+(l2,) = ax2.plot(t, range(len(t)), "C1")
+ax2.legend([l1, l2], [r"$\cos(2\pi t)$ (left)", "Straight (right)"])
+
+(l3,) = ax3.plot(t, s)
+ax3.legend([l3], [r"$\cos(\alpha)$"], loc="upper right")
+ax3.set_xlabel(r"$\alpha$ [rad] / $2\pi$")
+ax4 = ax3.secondary_xaxis(
+    "top", (lambda x: np.rad2deg(2 * np.pi * x), lambda x: np.deg2rad(x) / (2 * np.pi))
+)
+ax4.set_xlabel(r"$\alpha$ [°]")
