@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 # From https://code.visualstudio.com/docs/python/jupyter-support-py
 # The `# %%` marks a cell
 

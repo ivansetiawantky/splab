@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 # Testing of matplotlib EXPLICIT & IMPLICIT API.
 # Be careful, in matplotlib, axes and axis are different things.
 # %%
@@ -230,7 +231,7 @@ ax.plot([1, 2, 3, 4], [1, 4, 2, 3])
 
 # %%
 # a figure with one Axes on the left, and two on the right:
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa: E402
 
 plt.rcdefaults()  # Reset to the default plot style/params
 fig, axs = plt.subplot_mosaic([["left", "right_top"], ["left", "right_bottom"]])
@@ -239,8 +240,8 @@ axs["right_top"].plot([1, 2, 3, 4], [1, 4, 2, 3])
 axs["right_bottom"].plot([1, 2, 3, 4], [1, 4, 2, 3])
 
 # %%
-import matplotlib.pyplot as plt
-import numpy as np
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
 
 plt.rcdefaults()
 # plt.rcParams.update({"figure.autolayout": True})
@@ -279,3 +280,183 @@ ax4 = ax3.secondary_xaxis(
     "top", (lambda x: np.rad2deg(2 * np.pi * x), lambda x: np.deg2rad(x) / (2 * np.pi))
 )
 ax4.set_xlabel(r"$\alpha$ [°]")
+
+# %%
+# https://matplotlib.org/stable/tutorials/pyplot.html
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()
+fig, ax = plt.subplots(nrows=1, ncols=1)
+ax.plot([1, 2, 3, 4], [1, 4, 9, 16], "ro")
+# ax.set_axis
+ax.set(
+    xlim=[0, 6],
+    ylim=[0, 20],
+)
+plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+# evenly sampled time at 200ms intervals
+t = np.arange(0.0, 5.0, 0.2)
+
+# red dashes, blue squares and green triangles
+fig, ax = plt.subplots(nrows=1, ncols=1)
+ax.plot(t, t, "r--", t, t**2, "bs", t, t**3, "g^")
+plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+np.random.seed(42)
+data = {"a": np.arange(50), "c": np.random.randint(0, 50, 50), "d": np.random.randn(50)}
+data["b"] = data["a"] + 10 * np.random.randn(50)
+data["d"] = np.abs(data["d"]) * 100
+
+fig, ax = plt.subplots()
+ax.scatter("a", "b", c="c", s="d", data=data)
+ax.set(xlabel="entry a", ylabel="entry b")
+plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()
+names = ["group_a", "group_b", "group_c"]
+values = [1, 10, 100]
+
+fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(9, 3))
+axs[0].bar(names, values)
+axs[1].scatter(names, values)
+(line,) = axs[2].plot(names, values, linewidth=8.0)
+# line.set_antialiased(False)
+# line.set_linewidth(5.0)
+fig.suptitle("Categorical Plotting")
+plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+
+
+def f(t):
+    return np.exp(-t) * np.cos(2 * np.pi * t)
+
+
+t1 = np.arange(0.0, 5.0, 0.1)
+t2 = np.arange(0.0, 5.0, 0.02)
+
+fig, axs = plt.subplots(nrows=2, ncols=1)
+axs[0].plot(t1, f(t1), "bo", t2, f(t2), "k")
+axs[1].plot(t2, np.cos(2 * np.pi * t2), "r--")
+plt.show()
+
+# %%
+# Working with text
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+plt.style.use("ggplot")
+plt.rcParams.update({"figure.autolayout": True})
+
+np.random.seed(42)
+mu, sigma = 100, 15
+x = mu + sigma * np.random.randn(10000)
+
+fig, ax = plt.subplots()
+# the histogram of the data
+n, bins, patches = ax.hist(x, 50, density=True, facecolor="g", alpha=0.75)
+
+ax.set(
+    xlabel="Smarts",
+    ylabel="Probability",
+    title="Histogram of IQ",
+    xlim=[40, 160],
+    ylim=[0, 0.03],
+)
+ax.text(55, 0.025, r"$\mu=100,\ \sigma=15$", fontsize=15, color="red")
+ax.grid(True)
+plt.show()
+
+# %%
+# Annotating text
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+# plt.style.use("ggplot")
+# plt.rcParams.update({"figure.autolayout": True})
+fig, ax = plt.subplots()
+
+t = np.arange(0.0, 5.0, 0.01)
+s = np.cos(2 * np.pi * t)
+(line,) = ax.plot(t, s, lw=2)
+
+ax.annotate(
+    "local max",
+    xy=(2, 1),
+    xytext=(3, 1.5),
+    arrowprops=dict(facecolor="black", shrink=0.05),
+)
+ax.set(
+    ylim=[-2, 2],
+)
+plt.show()
+
+# %%
+# Logarithmic and other non-linear axis
+# Fixing random state for reproducibility
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+
+np.random.seed(19680801)
+
+# make up some data in the open interval (0, 1)
+y = np.random.normal(loc=0.5, scale=0.4, size=1000)
+y = y[(y > 0) & (y < 1)]
+y.sort()
+x = np.arange(len(y))
+
+# plot with various axes scales
+fig, axs = plt.subplots(nrows=2, ncols=2)
+
+# linear
+axs[0, 0].plot(x, y)
+axs[0, 0].set_yscale("linear")
+axs[0, 0].set_title("linear")
+axs[0, 0].grid(True)
+
+# log
+axs[0, 1].plot(x, y)
+axs[0, 1].set_yscale("log")
+axs[0, 1].set_title("log")
+axs[0, 1].grid(True)
+
+# symmetric log
+axs[1, 0].plot(x, y - y.mean())
+axs[1, 0].set_yscale("symlog", linthresh=0.01)
+axs[1, 0].set_title("symlog")
+axs[1, 0].grid(True)
+
+# logit
+axs[1, 1].plot(x, y)
+axs[1, 1].set_yscale("logit")
+axs[1, 1].set_title("logit")
+axs[1, 1].grid(True)
+# Adjust the subplot layout, because the logit one may take more space
+# than usual, due to y-tick labels like "1 - 10^{-3}"
+fig.subplots_adjust(
+    top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35
+)
+
+plt.show()
