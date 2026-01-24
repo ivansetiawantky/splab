@@ -460,3 +460,148 @@ fig.subplots_adjust(
 )
 
 plt.show()
+
+# %%
+# Good reading: https://realpython.com/python-matplotlib-guide/
+#
+#
+# https://realpython.com/python-matplotlib-guide/#appendix-b-interactive-mode
+#
+# If we start Python interactive window with Control-Enter (i.e. execute cell),
+# then the `plt.rcParams["interactive"]` will become True.
+# This means, we DON'T NEED to do `plt.show()`.
+#
+# If we Command+Shift+P (command palette) and `Python: Start Native Python REPL`,
+# then the `plt.rcParams["interactive"]` will become False.
+# This means, we NEED to do `plt.show()`.
+# NATIVE REPL will open in xquartz new window, whether it is interactive or not.
+#
+# Notably, interactive mode has nothing to do with what IDE you’re using,
+# or whether you’ve enable inline plotting with something like
+# jupyter notebook --matplotlib inline or %matplotlib.
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()
+print(plt.rcParams["interactive"])
+plt.ioff()
+print(plt.rcParams["interactive"])
+plt.ion()
+print(plt.rcParams["interactive"])
+plt.rcdefaults()
+plt.plot([1, 2, 3], [1, 4, 9])
+# Below plt.show() is required in case we use of ioff()
+# plt.show()
+
+# %%
+import matplotlib.pyplot as plt
+
+plt.rcdefaults()
+fig, _ = plt.subplots()
+print("type(fig) is:")
+type(fig)
+
+one_tick = fig.axes[0].yaxis.get_major_ticks()[0]
+print("type(one_tick) is:")
+type(one_tick)
+
+plt.plot([1, 2, 3], [4, 9, 16])
+plt.title("My Title")
+# Try to press F12 on title, and see that it will show set_title
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcdefaults()
+plt.style.use("bmh")
+# print(plt.style.available)
+rng = np.arange(50)
+rnd = np.random.randint(0, 10, size=(3, rng.size))
+yrs = 1950 + rng
+fig, ax = plt.subplots(figsize=(5, 3))
+# type(ax)
+ax.stackplot(yrs, rng + rnd, labels=["Eastasia", "Eurasia", "Oceania"])
+ax.set_title("Combined debt growth over time")
+ax.legend(loc="upper left")
+ax.set_ylabel("Total debt")
+ax.set_xlim(xmin=yrs[0], xmax=yrs[-1])
+fig.tight_layout()
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
+
+plt.rcdefaults()
+x = np.diag(np.arange(2, 12))[::-1]
+x[np.diag_indices_from(x[::-1])] = np.arange(2, 12)
+x2 = np.arange(x.size).reshape(x.shape)
+
+sides = ("left", "right", "top", "bottom")
+nolabels = {s: False for s in sides}
+nolabels.update({"label%s" % s: False for s in sides})
+# print(nolabels)
+
+with plt.rc_context(rc={"axes.grid": False}):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+    ax1.matshow(x)
+    img2 = ax2.matshow(x2, cmap="RdYlGn_r")
+    for ax in (ax1, ax2):
+        ax.tick_params(axis="both", which="both", **nolabels)
+    for i, j in zip(*x.nonzero()):
+        ax1.text(j, i, x[i, j], color="white", ha="center", va="center")
+
+    divider = make_axes_locatable(ax2)
+    cax = divider.append_axes("right", size="5%", pad=0)
+    plt.colorbar(img2, cax=cax, ax=[ax1, ax2])
+    fig.suptitle("Heatmaps with `Axes.matshow`", fontsize=16)
+
+plt.show()
+
+# %%
+# Mixing pandas plot with matplotlib stateless Axes (see the line ax = plt.gca())
+import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
+import numpy as np
+import pandas as pd
+
+plt.rcdefaults()
+url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+vix = (
+    pd.read_csv(
+        url,
+        index_col=0,
+        parse_dates=True,
+        na_values=".",
+        date_format="%Y-%m-%d",
+    )
+    .squeeze()
+    .dropna()
+)
+ma = vix.rolling("90D").mean()
+state = pd.cut(ma, bins=[-np.inf, 14, 18, 24, np.inf], labels=range(4))
+
+cmap = plt.get_cmap("RdYlGn_r")
+ma.plot(color="black", linewidth=1.5, marker="", figsize=(8, 4), label="VIX 90D MA")
+
+ax = plt.gca()  # Get the current Axes that ma.plot() references
+ax.set_xlabel("")
+ax.set_ylabel("90D moving average: CBOE VIX")
+ax.set_title("Volatility Regime State")
+ax.grid(False)
+ax.set_xlim(xmin=ma.index[0], xmax=ma.index[-1])
+
+trans = mtransforms.blended_transform_factory(ax.transData, ax.transAxes)
+for i, color in enumerate(cmap([0.2, 0.4, 0.6, 0.8])):
+    ax.fill_between(ma.index, 0, 1, where=state == i, facecolor=color, transform=trans)
+
+ax.axhline(
+    vix.mean(),
+    linestyle="dashed",
+    color="xkcd:dark grey",
+    alpha=0.6,
+    label="Full-period mean",
+    marker="",
+)
+# ax.legend(loc="upper center")
+ax.legend(loc="upper left")
