@@ -28,6 +28,7 @@ RUN apt-get update \
     libsamplerate0 \
     libsndfile1 \
     cmake \
+    curl \
     vim \
     less \
     tree \
@@ -43,6 +44,9 @@ COPY ./spluser/dot.bashrc ./spluser/dot.git-prompt.sh ./spluser/dot.svn-prompt.s
 RUN cat /tmp/dot.bashrc >> $SPLUSER_HOME/.bashrc
 RUN cp /tmp/dot.git-prompt.sh $SPLUSER_HOME/.git-prompt.sh
 RUN cp /tmp/dot.svn-prompt.sh $SPLUSER_HOME/.svn-prompt.sh
+RUN mkdir $SPLUSER_HOME/.fonts
+RUN curl -L https://github.com/adobe-fonts/source-han-code-jp/releases/download/2.012R/SourceHanCodeJP.ttc -o $SPLUSER_HOME/.fonts/SourceHanCodeJP.ttc
+# If font is not recognized, then try removing $SPLUSER_HOME/.cache/matplotlib
 
 # venv directory must be owned by spluser, so create venv with user spluser (i.e., after USER spluser layer)
 ENV VIRTUAL_ENV=$SPLUSER_HOME/venv
